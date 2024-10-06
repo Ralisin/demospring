@@ -2,7 +2,7 @@ package it.uniroma2.sc.demospringhibernate.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

@@ -1,9 +1,9 @@
 package it.uniroma2.sc.demospringhibernate.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 @Entity
 public class FigliaMappedSuperclass extends MadreMappedSuperclass {

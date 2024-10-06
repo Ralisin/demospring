@@ -1,6 +1,6 @@
 package it.uniroma2.sc.demospringhibernate.entity;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Citta {

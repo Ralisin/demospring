@@ -1,8 +1,8 @@
 package it.uniroma2.sc.demospringhibernate.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 @Entity
 public class FigliaConcretaTablePerClass extends FigliaAstrattaTablePerClass{
