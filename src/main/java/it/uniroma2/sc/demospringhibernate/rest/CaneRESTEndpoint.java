@@ -34,7 +34,7 @@ public class CaneRESTEndpoint {
             if (c == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(c, HttpStatus.FOUND);
+            return new ResponseEntity<>(c, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -43,7 +43,7 @@ public class CaneRESTEndpoint {
     public ResponseEntity<?> leggiCani() {
         List<Cane> tuttiICani = controllerDiCreazioneERetrieval.leggiCani();
         // mapping dto/entità e viceversa
-        return new ResponseEntity<>(tuttiICani, HttpStatus.FOUND);
+        return new ResponseEntity<>(tuttiICani, HttpStatus.OK);
     }
 
     /*@RequestMapping(method = RequestMethod.GET, path = "")
