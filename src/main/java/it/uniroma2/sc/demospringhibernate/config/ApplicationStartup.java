@@ -1,6 +1,6 @@
 package it.uniroma2.sc.demospringhibernate.config;
 
-import it.uniroma2.sc.demospringhibernate.control.ControllerDiCreazioneERetrieval;
+import it.uniroma2.sc.demospringhibernate.control.CreationAndRetrievalController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -15,11 +15,11 @@ public class ApplicationStartup
      * the application is ready to service requests.
      */
     @Autowired
-    ControllerDiCreazioneERetrieval controllerDiCreazioneERetrieval;
+    CreationAndRetrievalController creationAndRetrievalController;
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-        controllerDiCreazioneERetrieval.creazioniDiProva();
+        creationAndRetrievalController.createSampleData();
 
         //List<Impresa> impreseConCf = impresaDAO.findByCodiceFiscale("13931671005");
 

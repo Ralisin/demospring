@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface PersonaDao extends JpaRepository<Persona,Long> {
+public interface PersonDao extends JpaRepository<Persona,Long> {
 
     List<Persona> findByNomeAndCognome(String n, String c);
     List<Persona> findByNomeIn(String[] nomi);

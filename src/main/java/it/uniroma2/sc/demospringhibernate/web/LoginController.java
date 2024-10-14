@@ -13,16 +13,16 @@ public class LoginController {
         @RequestParam("username") String username, 
         @RequestParam("password") String password) {
         
-        // Controlla se i parametri sono corretti
+        // Check if parameters are correct
         if ("user".equals(username) && "pwd".equals(password)) {
-            // Se i dati coincidono, reindirizza a una pagina di successo
+            // If they are, redirect to the success page
             ModelAndView modelAndView = new ModelAndView("success");
             modelAndView.addObject("username", username);
             return modelAndView;
         } else {
-            // Se i dati non coincidono, mostra un messaggio di errore
+            // If they are not, show an error message
             ModelAndView modelAndView = new ModelAndView("index");
-            modelAndView.addObject("error", "Username o password errati!");
+            modelAndView.addObject("error", "Username or password incorrect!");
             return modelAndView;
         }
     }

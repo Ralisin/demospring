@@ -1,7 +1,7 @@
 <body>
 <head>
-    <script src="scriptEsempio.js"></script>
-    <title>Esempio JSP e JS</title>
+    <script src="scriptExample.js"></script>
+    <title>Example JSP e JS</title>
 
 </head>
 <h2>Login</h2>
@@ -13,10 +13,16 @@
     <input type="submit" value="Submit">
 </form>
 
-<button onclick="effettuaGet()">Invia GET</button>
-<p id="rispostaAllaGet"></p>
-<button onclick="effettuaGetEdElaboraOutput()">Invia GET ed elabora output</button>
-<p id="rispostaAllaGetElaborata"></p>
+<button onclick="doGet()">Send GET</button>
+<p id="responseToGet"></p>
+
+<br><br>
+<label for="username">Search dog by name:</label>
+<input type="text" id="dogName" name="dogName">
+<br><br>
+
+<button onclick="doGetAndElaborateOutput()">Send GET and elaborate output</button>
+
 
 <c:if test="${not empty error}">
     <p style="color:red">${error}</p>

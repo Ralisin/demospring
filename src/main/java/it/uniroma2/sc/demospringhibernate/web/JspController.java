@@ -8,6 +8,6 @@ public class JspController {
 
     @GetMapping("/jsp")
     public String showJspPage() {
-        return "index"; // nome del file JSP senza estensione
+        return "index"; // JSP filename (no extension)
     }
 }

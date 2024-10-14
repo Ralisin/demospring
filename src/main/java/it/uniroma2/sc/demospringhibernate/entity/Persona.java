@@ -43,7 +43,7 @@ public class Persona {
         this.titoliDiStudio = new LinkedList<>();
     }
 
-    public void aggiungiTitolo(TitoloDiStudio titoloDiStudio) {
+    public void addQualification(TitoloDiStudio titoloDiStudio) {
         titoliDiStudio.add(titoloDiStudio);
     }
 
