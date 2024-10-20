@@ -1,5 +1,5 @@
 function doGet() {
-    // URL a cui fare la richiesta
+    // URL to make the request
     const url = 'cane/';
 
     // Execute GET request
@@ -9,42 +9,42 @@ function doGet() {
             if (!response.ok) {
                 throw new Error('Error in the request: ' + response.status);
             }
-            // Convert response in text
+            // Convert the response to text
             return response.text();
         })
         .then(data => {
-            // Show the result in the paragraph with id "responseToGet"
+            // Display the result in the paragraph with id "responseToGet"
             document.getElementById('responseToGet').innerText = data;
         })
         .catch(error => {
-            // Manage possible errors
-            console.error(':', error);
+            // Handle possible errors
+            console.error('Error:', error);
             document.getElementById('responseToGet').innerText = 'Error: ' + error.message;
         });
 }
 
 
-
-// Funzione per effettuare la GET e mostrare i risultati in una tabella
+// Function to perform the GET and display the results in a table
 function doGetAndElaborateOutput() {
-    // URL a cui fare la richiesta
+    // Get the dog name from the input field
     const dogName = document.getElementById('dogName').value;
 
     var url = "cane/";
-    // URL a cui fare la richiesta, aggiungendo il parametro nomeCane
+    // If a dog name is provided, add it as a query parameter
     if(dogName)
         url = url + "search?nomeCane=" + dogName;
 
-    // Eseguire la GET request
+    // Execute the GET request
     fetch(url)
         .then(response => {
+            // Check if the response is ok
             if (!response.ok) {
                 throw new Error('Error in the request: ' + response.status);
             }
-            return response.json();
+            return response.json(); // Convert response to JSON format
         })
         .then(data => {
-            // Create table with data
+            // Create a table with the data received
             createTable(data);
         })
         .catch(error => {
@@ -53,16 +53,16 @@ function doGetAndElaborateOutput() {
         });
 }
 
-// Function to create a table with received data
+// Function to create a table with the received data
 function createTable(data) {
-    // Trova l'elemento dove inserire la tabella
+    // Find the element where to insert the table
     const container = document.getElementById('responseToGet');
 
-    // Crea l'elemento table
+    // Create the table element
     const table = document.createElement('table');
-    table.border = "1";
+    table.border = "1";  // Set border for table
 
-    // Create the table header
+    // Create the table header with relevant columns
     const thead = document.createElement('thead');
     thead.innerHTML = `
         <tr>
@@ -79,32 +79,103 @@ function createTable(data) {
     // Create the table body
     const tbody = document.createElement('tbody');
 
-    // Add one row for each element of the data array
+    // Add one row for each element in the data array
     data.forEach(item => {
         const tr = document.createElement('tr');
 
-        // Columns for each object property
+        // Populate the table with data for each dog and its owner
         tr.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.nomeCane}</td>
-            <td>${item.padrone.nome} ${item.padrone.cognome}</td>
-            <td>${item.padrone.indirizzo.viaENumero}</td>
-            <td>${item.padrone.indirizzo.cap}</td>
-            <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>
+            <td>${item.id}</td>  <!-- Dog's ID -->
+            <td>${item.nomeCane}</td>  <!-- Dog's name -->
+            <td>${item.padrone.nome} ${item.padrone.cognome}</td>  <!-- Owner's full name -->
+            <td>${item.padrone.indirizzo.viaENumero}</td>  <!-- Owner's street address -->
+            <td>${item.padrone.indirizzo.cap}</td>  <!-- Owner's postal code (ZIP) -->
+            <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>  <!-- Owner's qualifications -->
         `;
         tbody.appendChild(tr);
     });
 
     table.appendChild(tbody);
 
-    // Empty the container and add the table
+    // Clear the container and add the new table
     container.innerHTML = '';
     container.appendChild(table);
 }
 
-// function to format the person's educational qualifications
+// Function to format the person's educational qualifications
 function formatQualifications(qualifications) {
+    // Format each qualification with its name and year of completion, along with the class of diploma if available
     return qualifications.map(qualification => `
         ${qualification.nomeTitolo} (${qualification.annoConseguimento})${qualification.classeDiploma ? ' - Subject: ' + qualification.classeDiploma : ''}
-    `).join('<br>');
+    `).join('<br>');  // Join each formatted qualification with a line break
 }
+
+// Fetch owners for the select dropdown
+function fetchOwners() {
+    const url = '/persona/';
+    fetch(url)
+        .then(response => {
+            // Check if the response is ok
+            if (!response.ok) {
+                throw new Error('Error in retrieving owners: ' + response.status);
+            }
+            return response.json();  // Convert response to JSON
+        })
+        .then(data => {
+            const ownerSelect = document.getElementById('dogOwner');
+            // Populate the dropdown with owners retrieved from the API
+            data.forEach(persona => {
+                const option = document.createElement('option');
+                option.value = persona.id;
+                option.text = `${persona.nome} ${persona.cognome}`;
+                ownerSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            // Handle errors while fetching owners
+            console.error('Error:', error);
+            document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
+        });
+}
+
+// Function to create a new dog
+function createDog() {
+    // Get the new dog's name and selected owner ID
+    const dogName = document.getElementById('newDogName').value;
+    const ownerId = document.getElementById('dogOwner').value;
+
+    // Prepare the data to send in the POST request
+    const data = {
+        nomeCane: dogName,
+        padrone: { id: ownerId }  // Only the owner ID is required
+    };
+
+    // Make the POST request to create the dog
+    fetch('/cane/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Set the request content type to JSON
+        },
+        body: JSON.stringify(data)  // Convert data to JSON string
+    })
+        .then(response => {
+            // Check if the dog was created successfully
+            if (response.status === 201) {
+                return response.json();  // Return the newly created dog data
+            } else {
+                throw new Error('Error in creating dog: ' + response.status);
+            }
+        })
+        .then(data => {
+            // Display a success message with the created dog's details
+            document.getElementById('createDogResponse').innerText = 'Dog created successfully: ' + JSON.stringify(data);
+        })
+        .catch(error => {
+            // Handle errors during dog creation
+            console.error('Error:', error);
+            document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
+        });
+}
+
+// Call this function to fetch owners when the page loads
+fetchOwners();

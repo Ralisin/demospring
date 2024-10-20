@@ -16,6 +16,13 @@ public class CaneRESTEndpoint {
     @Autowired
     private ICreationAndRetrievalController controllerDiCreazioneERetrieval;
 
+    /**
+     * Creates a new dog.
+     *
+     * @param c The dog entity to be created. It is required in the request body.
+     * @return ResponseEntity with the created dog and HttpStatus.CREATED if successful,
+     *         or HttpStatus.BAD_REQUEST if the dog entity is null.
+     */
     @RequestMapping(method = RequestMethod.POST, path = "")
     public ResponseEntity<?> creaCane(@RequestBody(required = true) Cane c) {
         if (c != null) {
@@ -26,6 +33,14 @@ public class CaneRESTEndpoint {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Retrieves a dog by its ID.
+     *
+     * @param dogId The ID of the dog to be retrieved.
+     * @return ResponseEntity with the dog and HttpStatus.OK if found,
+     *         HttpStatus.NOT_FOUND if the dog is not found, or
+     *         HttpStatus.BAD_REQUEST if the ID is null.
+     */
     @RequestMapping(method = RequestMethod.GET, path = "{dogId}")
     public ResponseEntity<?> leggiCane(@PathVariable Long dogId) {
         if (dogId != null) {
@@ -38,18 +53,24 @@ public class CaneRESTEndpoint {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Retrieves all dogs.
+     *
+     * @return ResponseEntity with a list of all dogs and HttpStatus.OK.
+     */
     @RequestMapping(method = RequestMethod.GET, path = "")
     public ResponseEntity<?> leggiCani() {
         List<Cane> tuttiICani = controllerDiCreazioneERetrieval.loadDogs();
-        // mapping dto/entità e viceversa
         return new ResponseEntity<>(tuttiICani, HttpStatus.OK);
     }
 
-    /*@RequestMapping(method = RequestMethod.GET, path = "")
-    public List<Cane> leggiCani() {
-        return controllerDiCreazioneERetrieval.leggiCani();
-    }*/
-
+    /**
+     * Searches for dogs by their name.
+     *
+     * @param nomeCane The name of the dog to search for, passed as a query parameter.
+     * @return ResponseEntity with a list of matching dogs and HttpStatus.OK if the name is provided,
+     *         or HttpStatus.BAD_REQUEST if the name is null.
+     */
     @RequestMapping(method = RequestMethod.GET, path = "search") // /api/cane/search?nomeCane=Bobby
     public ResponseEntity<?> cercaCaniPerNome(@RequestParam(name = "nomeCane", required = false) String nomeCane) {
         if (nomeCane != null) {
@@ -58,6 +79,13 @@ public class CaneRESTEndpoint {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Searches for dogs by their owner's ID.
+     *
+     * @param idPadrone The ID of the owner to search dogs for, passed as a path variable.
+     * @return ResponseEntity with a list of matching dogs and HttpStatus.OK if successful,
+     *         or HttpStatus.NOT_FOUND if no owner is found or another error occurs.
+     */
     @RequestMapping(method = RequestMethod.GET, path = "padrone/{id}")
     public ResponseEntity<?> cercaCaniPerPadrone(@PathVariable(name = "id") Long idPadrone) {
         try {
@@ -68,6 +96,11 @@ public class CaneRESTEndpoint {
         }
     }
 
+    /**
+     * Generates sample data for testing purposes.
+     *
+     * @return ResponseEntity with HttpStatus.OK after generating the sample data.
+     */
     @RequestMapping(method = RequestMethod.PUT, path = "generate")
     public ResponseEntity<Void> generateSampleData() {
         controllerDiCreazioneERetrieval.createSampleData();
