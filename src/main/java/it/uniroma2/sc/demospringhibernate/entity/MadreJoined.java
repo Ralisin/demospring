@@ -6,6 +6,14 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class MadreJoined {
 
+
+    /**
+     * MadreJoined
+     *  - FigliaConcretaJoined
+     *  - FigliaAstrattaJoined
+     *      -- NipoteConcretaJoined
+     */
+
     @Id
     @GeneratedValue
     private Long id;

@@ -5,5 +5,5 @@ import jakarta.persistence.*;
 @Entity
 public abstract class FigliaAstrattaTablePerClass extends MadreTablePerClass{
 
-    private int altroNumero;
+    private int figliaAstrattaColumn;
 }

@@ -3,7 +3,7 @@ package it.uniroma2.sc.demospringhibernate.entity;
 import jakarta.persistence.Entity;
 
 @Entity
-public abstract class FigliaAstrattaJoined extends MadreJoined {
+public class FigliaAstrattaSingleTable extends MadreSingleTable {
 
     private int figliaAstrattaColumn;
 }

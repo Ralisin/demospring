@@ -1,9 +1,9 @@
 package it.uniroma2.sc.demospringhibernate.entity;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
-public abstract class FigliaConcretaJoined extends MadreJoined {
+public class FigliaConcretaSingleTable extends MadreSingleTable {
 
     private int figliaConcretaColumn;
 }

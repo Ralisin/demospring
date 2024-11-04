@@ -5,7 +5,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 
 @Entity
-public class FigliaConcretaTablePerClass extends FigliaAstrattaTablePerClass{
+public class FigliaConcretaTablePerClass extends MadreTablePerClass {
 
-    private int altroNumeroAncora;
+    private int figliaConcretaColumn;
 }

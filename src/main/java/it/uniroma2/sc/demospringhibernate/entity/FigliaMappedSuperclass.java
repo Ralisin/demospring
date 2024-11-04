@@ -8,5 +8,5 @@ import jakarta.persistence.MappedSuperclass;
 @Entity
 public class FigliaMappedSuperclass extends MadreMappedSuperclass {
 
-    private int numero;
+    private int figliaMappedSuperclass;
 }

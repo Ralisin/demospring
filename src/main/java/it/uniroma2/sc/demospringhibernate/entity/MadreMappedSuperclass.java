@@ -9,5 +9,5 @@ public class MadreMappedSuperclass {
     @GeneratedValue
     private Long id;
 
-    private int numero;
+    private int madreMappedSuperclass;
 }

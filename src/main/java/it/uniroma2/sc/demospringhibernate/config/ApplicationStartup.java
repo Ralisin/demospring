@@ -19,7 +19,7 @@ public class ApplicationStartup
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-        creationAndRetrievalController.createSampleData();
+        //creationAndRetrievalController.createSampleData();
 
         //List<Impresa> impreseConCf = impresaDAO.findByCodiceFiscale("13931671005");
 
