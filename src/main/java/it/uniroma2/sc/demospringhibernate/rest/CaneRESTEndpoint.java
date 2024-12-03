@@ -1,6 +1,7 @@
 package it.uniroma2.sc.demospringhibernate.rest;
 
 import it.uniroma2.sc.demospringhibernate.control.ICreationAndRetrievalController;
+import it.uniroma2.sc.demospringhibernate.control.IDeleteController;
 import it.uniroma2.sc.demospringhibernate.entity.Cane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,9 @@ public class CaneRESTEndpoint {
 
     @Autowired
     private ICreationAndRetrievalController controllerDiCreazioneERetrieval;
+
+    @Autowired
+    private IDeleteController deleteController;
 
     /**
      * Creates a new dog.
@@ -90,6 +94,18 @@ public class CaneRESTEndpoint {
     public ResponseEntity<?> cercaCaniPerPadrone(@PathVariable(name = "id") Long idPadrone) {
         try {
             return new ResponseEntity<>(controllerDiCreazioneERetrieval.searchDogsByOwner(idPadrone), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, path = "{dogId}")
+    public ResponseEntity<?> cancellaCane(@PathVariable Long dogId) {
+        if (dogId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        try {
+            return new ResponseEntity<>(deleteController.deleteDogById(dogId), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
