@@ -2,6 +2,16 @@
 <head>
     <script src="scriptExample.js"></script>
     <title>Example JSP and JS</title>
+
+    <style>
+        pre {
+            margin: 0;
+            background-color: #f9f9f9;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 
 <h2>Login</h2>
@@ -23,18 +33,22 @@
     <p style="color:red">${error}</p>
 </c:if>
 </body>
-
+<hr>
 <!-- Button to trigger a GET request -->
 <button onclick="doGet()">Send GET</button>
+<p></p>
+<!-- Button to trigger a GET request and process the output (e.g., display a table) -->
+<button onclick="doGetAndElaborateOutput()">Send GET and elaborate output</button>
 <p id="responseToGet"></p> <!-- Placeholder to display GET request response -->
 
-<br><br>
+<hr>
+
+
+
+<p></p>
 <label for="dogName">Search dog by name:</label>
 <!-- Input field to search for a dog by name -->
 <input type="text" id="dogName" name="dogName"><br><br>
-
-<!-- Button to trigger a GET request and process the output (e.g., display a table) -->
-<button onclick="doGetAndElaborateOutput()">Send GET and elaborate output</button>
 
 <hr>
 

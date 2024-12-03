@@ -13,8 +13,51 @@ function doGet() {
             return response.text();
         })
         .then(data => {
-            // Display the result in the paragraph with id "responseToGet"
-            document.getElementById('responseToGet').innerText = data;
+            const jsonData = JSON.parse(data);
+
+            const container = document.createElement('div');
+
+            const rowTop = document.createElement('div');
+            const rowMiddle = document.createElement('div');
+            const rowBottom = document.createElement('div');
+
+            rowMiddle.style.marginLeft = '25px';
+            rowMiddle.style.display = 'flex';
+            rowMiddle.style.alignItems = 'flex-start';
+
+            container.appendChild(rowTop);
+            container.appendChild(rowMiddle);
+            container.appendChild(rowBottom);
+
+            const preElementLeft = document.createElement('pre');
+            preElementLeft.style.display = 'inline-block';
+            preElementLeft.style.marginRight = '10px';
+            preElementLeft.textContent = "[";
+
+            rowTop.appendChild(preElementLeft);
+
+            // Add single elements to the list
+            jsonData.forEach((item, index) => {
+                const formattedItem = JSON.stringify(item, null, 2);
+
+                const preElement = document.createElement('pre');
+                preElement.style.display = 'inline-block';
+                preElement.style.marginRight = '10px';
+                preElement.textContent = formattedItem + ((index < jsonData.length - 1) ? "," : "");
+
+                rowMiddle.appendChild(preElement);
+            });
+
+            // Crea la riga inferiore con la parentesi quadra di chiusura
+            const preElementRight = document.createElement('pre');
+            preElementRight.style.display = 'inline-block';
+            preElementRight.style.marginRight = '10px';
+            preElementRight.textContent = "]";
+
+            rowBottom.appendChild(preElementRight);
+
+            document.getElementById('responseToGet').innerHTML = '';
+            document.getElementById('responseToGet').appendChild(container);
         })
         .catch(error => {
             // Handle possible errors
@@ -22,7 +65,6 @@ function doGet() {
             document.getElementById('responseToGet').innerText = 'Error: ' + error.message;
         });
 }
-
 
 // Function to perform the GET and display the results in a table
 function doGetAndElaborateOutput() {
@@ -122,6 +164,8 @@ function fetchOwners() {
             return response.json();  // Convert response to JSON
         })
         .then(data => {
+            console.log(data)
+
             const ownerSelect = document.getElementById('dogOwner');
             // Populate the dropdown with owners retrieved from the API
             data.forEach(persona => {

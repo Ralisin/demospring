@@ -1,7 +1,6 @@
 package it.uniroma2.sc.demospringhibernate.rest;
 
 import it.uniroma2.sc.demospringhibernate.control.ICreationAndRetrievalController;
-import it.uniroma2.sc.demospringhibernate.entity.Cane;
 import it.uniroma2.sc.demospringhibernate.entity.Persona;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,5 +23,4 @@ public class PersonaRESTEndpoint {
         // mapping dto/entity & viceversa
         return new ResponseEntity<>(allPeople, HttpStatus.OK);
     }
-
 }

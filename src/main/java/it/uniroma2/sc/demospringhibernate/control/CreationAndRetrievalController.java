@@ -35,10 +35,8 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      */
     @Transactional
     public void createSampleData() {
-        // Create a new address
+        // Persona 1
         Indirizzo indirizzo = new Indirizzo("Via Roma 20", "00100");
-
-        // Create a new person with qualifications (degree and diploma)
         Persona p = new Persona("Manuel", "Mastrofini", indirizzo);
         Laurea l = new Laurea("Degree", 2010, false);
         Diploma d = new Diploma("High school diploma", 2010, "Tourism");
@@ -64,16 +62,23 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
         // Create and save more people
         Indirizzo indirizzo2 = new Indirizzo("Via Firenze 10", "00500");
         Persona p2 = new Persona("John", "Doe", indirizzo2);
-        personDao.save(p2);
+        p2 = personDao.save(p2);
+
+        Cane c2 = new Cane("Mary", p2);
+        dogDao.save(c2);
+
         Indirizzo indirizzo3 = new Indirizzo("Via Venezia 30", "00300");
         Persona p3 = new Persona("Mary", "Jane", indirizzo3);
-        personDao.save(p3);
+        p3 = personDao.save(p3);
 
-        // Query for dogs by specific criteria
-        List<Cane> dogsNamedRosy = dogDao.findByNome("Rosy");
-        List<Cane> dogsByOwner = dogDao.findByPadrone(p);
-        List<Cane> dogsByOwnerLastName = dogDao.findByPadrone_CognomeLike("Mast%");
-        List<Cane> dogsByOwnerLastNameNoResults = dogDao.findByPadrone_CognomeLike("Unknown%");
+        Cane c3 = new Cane("Marge", p3);
+        dogDao.save(c3);
+
+//        // Query for dogs by specific criteria
+//        List<Cane> dogsNamedRosy = dogDao.findByNome("Rosy");
+//        List<Cane> dogsByOwner = dogDao.findByPadrone(p);
+//        List<Cane> dogsByOwnerLastName = dogDao.findByPadrone_CognomeLike("Mast%");
+//        List<Cane> dogsByOwnerLastNameNoResults = dogDao.findByPadrone_CognomeLike("Unknown%");
     }
 
     /**
