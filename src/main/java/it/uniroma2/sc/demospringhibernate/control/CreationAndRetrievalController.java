@@ -4,12 +4,15 @@ import it.uniroma2.sc.demospringhibernate.dao.DogDao;
 import it.uniroma2.sc.demospringhibernate.dao.DiplomaDao;
 import it.uniroma2.sc.demospringhibernate.dao.DegreeDao;
 import it.uniroma2.sc.demospringhibernate.dao.PersonDao;
+import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
 import it.uniroma2.sc.demospringhibernate.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -104,16 +107,28 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      * @param idCane the ID of the dog, must not be null.
      * @return the dog with the given ID.
      */
-    public Cane loadDogById(@NotNull Long idCane) {
-        return dogDao.getOne(idCane);
+    public CaneDTO loadDogById(@NotNull Long idCane) {
+        Cane c = dogDao.getOne(idCane);
+
+        return new CaneDTO(c.getId(), c.getNome(), c.getPadrone().getNome(), c.getPadrone().getCognome());
     }
 
     /**
      * Retrieves all dogs from the database.
      * @return a list of all dogs.
      */
-    public List<Cane> loadDogs() {
-        return dogDao.findAll();
+    public List<CaneDTO> loadDogs() {
+        List<Cane> listDogs = dogDao.findAll();
+
+        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+
+        listDogs.forEach(d -> {
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+
+            listDogsDTO.add(caneDTO);
+        });
+
+        return listDogsDTO;
     }
 
     /**
@@ -121,8 +136,18 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      * @param name the name of the dog, must not be null.
      * @return a list of dogs with the given name.
      */
-    public List<Cane> searchDogsByName(@NotNull String name) {
-        return dogDao.findByNome(name);
+    public List<CaneDTO> searchDogsByName(@NotNull String name) {
+        List<Cane> listDogs = dogDao.findByNome(name);
+
+        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+
+        listDogs.forEach(d -> {
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+
+            listDogsDTO.add(caneDTO);
+        });
+
+        return listDogsDTO;
     }
 
     /**
@@ -131,11 +156,22 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      * @return a list of dogs belonging to the owner.
      * @throws Exception if no owner is found with the given ID.
      */
-    public List<Cane> searchDogsByOwner(@NotNull Long idOwner) throws Exception {
+    public List<CaneDTO> searchDogsByOwner(@NotNull Long idOwner) throws Exception {
         Persona owner = personDao.getOne(idOwner);
         if (owner == null) {
             throw new Exception("No owner found for id " + idOwner);
         }
-        return dogDao.findByPadrone(owner);
+
+        List<Cane> listDogs = dogDao.findByPadrone(owner);
+
+        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+
+        listDogs.forEach(d -> {
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+
+            listDogsDTO.add(caneDTO);
+        });
+
+        return listDogsDTO;
     }
 }

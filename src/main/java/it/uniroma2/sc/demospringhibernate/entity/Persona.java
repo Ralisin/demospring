@@ -2,9 +2,9 @@ package it.uniroma2.sc.demospringhibernate.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 import lombok.Data;
 
-import jakarta.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class Persona {
     @OneToMany(cascade = CascadeType.ALL)
     private List<TitoloDiStudio> titoliDiStudio;
 
-    @OneToMany (mappedBy = "padrone")
+    @OneToMany(mappedBy = "padrone")
     @JsonIgnore
     private List<Cane> cani;
 

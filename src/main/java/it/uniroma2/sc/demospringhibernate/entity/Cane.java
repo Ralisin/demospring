@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Data
@@ -20,15 +21,6 @@ public class Cane {
 
     @ManyToOne(fetch = FetchType.LAZY)  // Defines a many-to-one relationship with Persona, using lazy loading.
     private Persona padrone;  // The owner (Persona) of the dog.
-
-    /**
-     * Getter method for the dog's owner.
-     *
-     * @return the owner of the dog.
-     */
-    public Persona getPadrone() {
-        return padrone;
-    }
 
     /**
      * Default constructor required by JPA.

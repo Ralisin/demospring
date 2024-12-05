@@ -16,10 +16,10 @@ public class ApplicationStartup
      */
     @Autowired
     CreationAndRetrievalController creationAndRetrievalController;
+
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
-
-        //creationAndRetrievalController.createSampleData();
+        creationAndRetrievalController.createSampleData();
 
         //List<Impresa> impreseConCf = impresaDAO.findByCodiceFiscale("13931671005");
 
@@ -35,8 +35,6 @@ public class ApplicationStartup
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-
-
 
         /*Contratto contratto1 = new Contratto("COM", "Contratto del commercio");
         contratto1 = contrattoDAO.save(contratto1);

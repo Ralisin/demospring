@@ -39,16 +39,17 @@
 <p></p>
 <!-- Button to trigger a GET request and process the output (e.g., display a table) -->
 <button onclick="doGetAndElaborateOutput()">Send GET and elaborate output</button>
-<p id="responseToGet"></p> <!-- Placeholder to display GET request response -->
+<p id="responseToGet"
+   style="max-width: 100%; overflow-x: scroll; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none;"></p> <!-- Placeholder to display GET request response -->
 
 <hr>
+<br>
 
-
-
-<p></p>
 <label for="dogName">Search dog by name:</label>
 <!-- Input field to search for a dog by name -->
-<input type="text" id="dogName" name="dogName"><br><br>
+<input type="text" id="dogName" name="dogName">
+
+<br><br>
 
 <hr>
 
@@ -70,4 +71,3 @@
 </form>
 
 <p id="createDogResponse"></p> <!-- Placeholder to display the result of the dog creation request -->
-

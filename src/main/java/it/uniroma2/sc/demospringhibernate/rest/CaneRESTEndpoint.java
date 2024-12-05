@@ -3,6 +3,7 @@ package it.uniroma2.sc.demospringhibernate.rest;
 import it.uniroma2.sc.demospringhibernate.control.ICreationAndRetrievalController;
 import it.uniroma2.sc.demospringhibernate.control.IDeleteController;
 import it.uniroma2.sc.demospringhibernate.entity.Cane;
+import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +49,7 @@ public class CaneRESTEndpoint {
     @RequestMapping(method = RequestMethod.GET, path = "{dogId}")
     public ResponseEntity<?> leggiCane(@PathVariable Long dogId) {
         if (dogId != null) {
-            Cane c = controllerDiCreazioneERetrieval.loadDogById(dogId);
+            CaneDTO c = controllerDiCreazioneERetrieval.loadDogById(dogId);
             if (c == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -64,7 +65,7 @@ public class CaneRESTEndpoint {
      */
     @RequestMapping(method = RequestMethod.GET, path = "")
     public ResponseEntity<?> leggiCani() {
-        List<Cane> tuttiICani = controllerDiCreazioneERetrieval.loadDogs();
+        List<CaneDTO> tuttiICani = controllerDiCreazioneERetrieval.loadDogs();
         return new ResponseEntity<>(tuttiICani, HttpStatus.OK);
     }
 

@@ -71,10 +71,12 @@ function doGetAndElaborateOutput() {
     // Get the dog name from the input field
     const dogName = document.getElementById('dogName').value;
 
-    var url = "cane/";
+    let url = "cane/";
+
+    console.log(dogName)
+
     // If a dog name is provided, add it as a query parameter
-    if(dogName)
-        url = url + "search?nomeCane=" + dogName;
+    if (dogName) url = url + "search?nomeCane=" + dogName;
 
     // Execute the GET request
     fetch(url)
@@ -126,13 +128,19 @@ function createTable(data) {
         const tr = document.createElement('tr');
 
         // Populate the table with data for each dog and its owner
+        // tr.innerHTML = `
+        //     <td>${item.id}</td>  <!-- Dog's ID -->
+        //     <td>${item.nomeCane}</td>  <!-- Dog's name -->
+        //     <td>${item.padrone.nome} ${item.padrone.cognome}</td>  <!-- Owner's full name -->
+        //     <td>${item.padrone.indirizzo.viaENumero}</td>  <!-- Owner's street address -->
+        //     <td>${item.padrone.indirizzo.cap}</td>  <!-- Owner's postal code (ZIP) -->
+        //     <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>  <!-- Owner's qualifications -->
+        // `;
+
         tr.innerHTML = `
             <td>${item.id}</td>  <!-- Dog's ID -->
-            <td>${item.nomeCane}</td>  <!-- Dog's name -->
-            <td>${item.padrone.nome} ${item.padrone.cognome}</td>  <!-- Owner's full name -->
-            <td>${item.padrone.indirizzo.viaENumero}</td>  <!-- Owner's street address -->
-            <td>${item.padrone.indirizzo.cap}</td>  <!-- Owner's postal code (ZIP) -->
-            <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>  <!-- Owner's qualifications -->
+            <td>${item.nome}</td>  <!-- Dog's name -->
+            <td>${item.nomePadrone} ${item.cognomePadrone}</td>  <!-- Owner's full name -->
         `;
         tbody.appendChild(tr);
     });
@@ -154,7 +162,7 @@ function formatQualifications(qualifications) {
 
 // Fetch owners for the select dropdown
 function fetchOwners() {
-    const url = '/persona/';
+    const url = '/api/persona/';
     fetch(url)
         .then(response => {
             // Check if the response is ok
@@ -164,8 +172,6 @@ function fetchOwners() {
             return response.json();  // Convert response to JSON
         })
         .then(data => {
-            console.log(data)
-
             const ownerSelect = document.getElementById('dogOwner');
             // Populate the dropdown with owners retrieved from the API
             data.forEach(persona => {
@@ -190,17 +196,14 @@ function createDog() {
 
     // Prepare the data to send in the POST request
     const data = {
-        nomeCane: dogName,
-        padrone: { id: ownerId }  // Only the owner ID is required
+        nomeCane: dogName, padrone: {id: ownerId}  // Only the owner ID is required
     };
 
     // Make the POST request to create the dog
-    fetch('/cane/', {
-        method: 'POST',
-        headers: {
+    fetch('/api/cane/', {
+        method: 'POST', headers: {
             'Content-Type': 'application/json'  // Set the request content type to JSON
-        },
-        body: JSON.stringify(data)  // Convert data to JSON string
+        }, body: JSON.stringify(data)  // Convert data to JSON string
     })
         .then(response => {
             // Check if the dog was created successfully

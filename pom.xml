@@ -83,5 +83,9 @@
             <version>4.0.1</version>
             <scope>provided</scope> <!-- Provided by the runtime container, not included in the built artifact -->
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 </project>
