@@ -1,6 +1,5 @@
 package it.uniroma2.sc.demospringhibernate.control;
 
-import it.uniroma2.sc.demospringhibernate.entity.Cane;
 import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
 import it.uniroma2.sc.demospringhibernate.entity.Persona;
 
@@ -14,7 +13,7 @@ public interface ICreationAndRetrievalController {
      * @param c The dog entity to be created.
      * @return The created dog.
      */
-    Cane createDog(Cane c);
+    CaneDTO createDog(CaneDTO c);
 
     /**
      * Loads a dog by its ID.

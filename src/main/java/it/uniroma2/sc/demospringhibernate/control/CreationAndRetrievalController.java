@@ -6,6 +6,8 @@ import it.uniroma2.sc.demospringhibernate.dao.DegreeDao;
 import it.uniroma2.sc.demospringhibernate.dao.PersonDao;
 import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
 import it.uniroma2.sc.demospringhibernate.entity.*;
+import it.uniroma2.sc.demospringhibernate.mapper.CaneMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class CreationAndRetrievalController implements ICreationAndRetrievalController {
@@ -56,12 +59,6 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
         Cane c1 = new Cane("Brian", p);
         dogDao.save(c1);
 
-        // Retrieve and print all saved dogs
-        List<Cane> allSavedDogs = dogDao.findAll();
-        for (Cane c : allSavedDogs) {
-            System.out.println(c);
-        }
-
         // Create and save more people
         Indirizzo indirizzo2 = new Indirizzo("Via Firenze 10", "00500");
         Persona p2 = new Persona("John", "Doe", indirizzo2);
@@ -74,7 +71,7 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
         Persona p3 = new Persona("Mary", "Jane", indirizzo3);
         p3 = personDao.save(p3);
 
-        Cane c3 = new Cane("Marge", p3);
+        Cane c3 = new Cane("Lupus", p3);
         dogDao.save(c3);
 
 //        // Query for dogs by specific criteria
@@ -95,11 +92,17 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
 
     /**
      * Saves a new dog in the database.
-     * @param c the dog to be created, must not be null.
+     * @param cDTO the dog DTO to be created, must not be null.
      * @return the created dog.
      */
-    public Cane createDog(@NotNull Cane c) {
-        return dogDao.save(c);
+    public CaneDTO createDog(@NotNull CaneDTO cDTO) {
+        Logger.getAnonymousLogger().info(cDTO.toString());
+
+        Cane c = CaneMapper.toEntity(cDTO);
+
+        c = dogDao.save(c);
+
+        return CaneMapper.toDTO(c);
     }
 
     /**
@@ -108,9 +111,10 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      * @return the dog with the given ID.
      */
     public CaneDTO loadDogById(@NotNull Long idCane) {
-        Cane c = dogDao.getOne(idCane);
+        Cane c = dogDao.findById(idCane)
+                .orElseThrow(() -> new EntityNotFoundException("No dog found for id: " + idCane));
 
-        return new CaneDTO(c.getId(), c.getNome(), c.getPadrone().getNome(), c.getPadrone().getCognome());
+        return new CaneDTO(c.getId(), c.getNome(), c.getPadrone());
     }
 
     /**
@@ -120,10 +124,10 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
     public List<CaneDTO> loadDogs() {
         List<Cane> listDogs = dogDao.findAll();
 
-        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+        List<CaneDTO> listDogsDTO = new ArrayList<>();
 
         listDogs.forEach(d -> {
-            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone());
 
             listDogsDTO.add(caneDTO);
         });
@@ -139,10 +143,10 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
     public List<CaneDTO> searchDogsByName(@NotNull String name) {
         List<Cane> listDogs = dogDao.findByNome(name);
 
-        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+        List<CaneDTO> listDogsDTO = new ArrayList<>();
 
         listDogs.forEach(d -> {
-            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone());
 
             listDogsDTO.add(caneDTO);
         });
@@ -157,17 +161,15 @@ public class CreationAndRetrievalController implements ICreationAndRetrievalCont
      * @throws Exception if no owner is found with the given ID.
      */
     public List<CaneDTO> searchDogsByOwner(@NotNull Long idOwner) throws Exception {
-        Persona owner = personDao.getOne(idOwner);
-        if (owner == null) {
-            throw new Exception("No owner found for id " + idOwner);
-        }
+        Persona owner = personDao.findById(idOwner)
+                .orElseThrow(() -> new EntityNotFoundException("No owner found for id: " + idOwner));
 
         List<Cane> listDogs = dogDao.findByPadrone(owner);
 
-        List<CaneDTO> listDogsDTO = new ArrayList<CaneDTO>();
+        List<CaneDTO> listDogsDTO = new ArrayList<>();
 
         listDogs.forEach(d -> {
-            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone().getNome(), d.getPadrone().getCognome());
+            CaneDTO caneDTO = new CaneDTO(d.getId(), d.getNome(), d.getPadrone());
 
             listDogsDTO.add(caneDTO);
         });

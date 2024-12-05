@@ -1,15 +1,12 @@
 package it.uniroma2.sc.demospringhibernate.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import jakarta.persistence.*;
-import lombok.Getter;
 
 @Entity
 @Data
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // Ignore properties related to Hibernate's lazy loading mechanism.
 public class Cane {
 
     @Id

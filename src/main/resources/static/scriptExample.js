@@ -128,20 +128,15 @@ function createTable(data) {
         const tr = document.createElement('tr');
 
         // Populate the table with data for each dog and its owner
-        // tr.innerHTML = `
-        //     <td>${item.id}</td>  <!-- Dog's ID -->
-        //     <td>${item.nomeCane}</td>  <!-- Dog's name -->
-        //     <td>${item.padrone.nome} ${item.padrone.cognome}</td>  <!-- Owner's full name -->
-        //     <td>${item.padrone.indirizzo.viaENumero}</td>  <!-- Owner's street address -->
-        //     <td>${item.padrone.indirizzo.cap}</td>  <!-- Owner's postal code (ZIP) -->
-        //     <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>  <!-- Owner's qualifications -->
-        // `;
-
         tr.innerHTML = `
             <td>${item.id}</td>  <!-- Dog's ID -->
-            <td>${item.nome}</td>  <!-- Dog's name -->
-            <td>${item.nomePadrone} ${item.cognomePadrone}</td>  <!-- Owner's full name -->
+            <td>${item.nomeCane}</td>  <!-- Dog's name -->
+            <td>${item.padrone.nome} ${item.padrone.cognome}</td>  <!-- Owner's full name -->
+            <td>${item.padrone.indirizzo.viaENumero}</td>  <!-- Owner's street address -->
+            <td>${item.padrone.indirizzo.cap}</td>  <!-- Owner's postal code (ZIP) -->
+            <td>${formatQualifications(item.padrone.titoliDiStudio)}</td>  <!-- Owner's qualifications -->
         `;
+
         tbody.appendChild(tr);
     });
 

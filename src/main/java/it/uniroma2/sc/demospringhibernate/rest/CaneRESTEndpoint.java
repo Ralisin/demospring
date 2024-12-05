@@ -2,7 +2,6 @@ package it.uniroma2.sc.demospringhibernate.rest;
 
 import it.uniroma2.sc.demospringhibernate.control.ICreationAndRetrievalController;
 import it.uniroma2.sc.demospringhibernate.control.IDeleteController;
-import it.uniroma2.sc.demospringhibernate.entity.Cane;
 import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,12 +28,13 @@ public class CaneRESTEndpoint {
      *         or HttpStatus.BAD_REQUEST if the dog entity is null.
      */
     @RequestMapping(method = RequestMethod.POST, path = "")
-    public ResponseEntity<?> creaCane(@RequestBody(required = true) Cane c) {
+    public ResponseEntity<?> creaCane(@RequestBody(required = true) CaneDTO c) {
         if (c != null) {
-            Cane newCane = controllerDiCreazioneERetrieval.createDog(c);
-            ResponseEntity<Cane> response = new ResponseEntity<>(newCane, HttpStatus.CREATED);
+            CaneDTO newCane = controllerDiCreazioneERetrieval.createDog(c);
+            ResponseEntity<CaneDTO> response = new ResponseEntity<>(newCane, HttpStatus.CREATED);
             return response;
         }
+
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

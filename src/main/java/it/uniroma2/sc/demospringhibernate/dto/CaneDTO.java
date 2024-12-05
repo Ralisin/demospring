@@ -1,26 +1,30 @@
 package it.uniroma2.sc.demospringhibernate.dto;
 
+import it.uniroma2.sc.demospringhibernate.entity.Persona;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 public class CaneDTO {
-    @Setter
     private Long id;
 
-    @Setter
-    private String nome;
+    private String nomeCane;
 
-    @Setter
-    private String nomePadrone;
+    private Persona padrone;
 
-    @Setter
-    private String cognomePadrone;
-
-    public CaneDTO(Long id, String nome, String nomePadrone, String cognomePadrone) {
+    public CaneDTO(Long id, String nome, Persona padrone) {
         this.id = id;
-        this.nome = nome;
-        this.nomePadrone = nomePadrone;
-        this.cognomePadrone = cognomePadrone;
+        this.nomeCane = nome;
+        this.padrone = padrone;
+    }
+
+    @Override
+    public String toString() {
+        return "CaneDTO{" +
+                "id=" + id +
+                ", nomeCane='" + nomeCane + '\'' +
+                ", padrone=" + padrone +
+                '}';
     }
 }
