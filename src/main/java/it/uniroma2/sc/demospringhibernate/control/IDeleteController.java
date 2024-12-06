@@ -6,5 +6,5 @@ public interface IDeleteController {
      *
      * @return number of items deleted.
      */
-    int deleteDogById(Long id) throws Exception;
+    int deleteDogById(Long id, String token) throws Exception;
 }

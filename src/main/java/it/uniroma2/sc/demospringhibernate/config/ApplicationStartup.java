@@ -1,6 +1,8 @@
 package it.uniroma2.sc.demospringhibernate.config;
 
 import it.uniroma2.sc.demospringhibernate.control.CreationAndRetrievalController;
+import it.uniroma2.sc.demospringhibernate.enums.Role;
+import it.uniroma2.sc.demospringhibernate.secutiry.TokenStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -17,9 +19,19 @@ public class ApplicationStartup
     @Autowired
     CreationAndRetrievalController creationAndRetrievalController;
 
+    @Autowired
+    TokenStorage tokenStorage;
+
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
         creationAndRetrievalController.createSampleData();
+
+//        String token = tokenStorage.generateToken();
+        String token = "VetToken";
+        tokenStorage.storeToken(token, Role.VETERINARIO);
+
+        token = "ClientToken";
+        tokenStorage.storeToken(token, Role.CLIENTE);
 
         //List<Impresa> impreseConCf = impresaDAO.findByCodiceFiscale("13931671005");
 

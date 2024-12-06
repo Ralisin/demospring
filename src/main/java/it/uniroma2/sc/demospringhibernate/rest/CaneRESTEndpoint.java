@@ -102,11 +102,11 @@ public class CaneRESTEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "{dogId}")
-    public ResponseEntity<?> cancellaCane(@PathVariable Long dogId) {
+    public ResponseEntity<?> cancellaCane(@PathVariable Long dogId, @RequestHeader("Authorization") String token) {
         if (dogId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         try {
-            return new ResponseEntity<>(deleteController.deleteDogById(dogId), HttpStatus.OK);
+            return new ResponseEntity<>(deleteController.deleteDogById(dogId, token), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
