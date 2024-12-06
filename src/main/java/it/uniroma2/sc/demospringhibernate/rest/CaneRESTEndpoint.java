@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/cane/")
@@ -32,6 +33,7 @@ public class CaneRESTEndpoint {
         if (c != null) {
             CaneDTO newCane = controllerDiCreazioneERetrieval.createDog(c);
             ResponseEntity<CaneDTO> response = new ResponseEntity<>(newCane, HttpStatus.CREATED);
+
             return response;
         }
 
@@ -96,7 +98,7 @@ public class CaneRESTEndpoint {
         try {
             return new ResponseEntity<>(controllerDiCreazioneERetrieval.searchDogsByOwner(idPadrone), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
@@ -105,10 +107,15 @@ public class CaneRESTEndpoint {
     public ResponseEntity<?> cancellaCane(@PathVariable Long dogId, @RequestHeader("Authorization") String token) {
         if (dogId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+        token = token.replace("Bearer ", "");
+
         try {
             return new ResponseEntity<>(deleteController.deleteDogById(dogId, token), HttpStatus.OK);
+        } catch (SecurityException e) {
+            Logger.getAnonymousLogger().info(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.FORBIDDEN);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }

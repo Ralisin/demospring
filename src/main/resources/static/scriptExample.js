@@ -66,14 +66,17 @@ function doGet() {
         });
 }
 
+// Function to clear output
+function doClear() {
+    document.getElementById('responseToGet').innerHTML = '';
+}
+
 // Function to perform the GET and display the results in a table
 function doGetAndElaborateOutput() {
     // Get the dog name from the input field
     const dogName = document.getElementById('dogName').value;
 
     let url = "cane/";
-
-    console.log(dogName)
 
     // If a dog name is provided, add it as a query parameter
     if (dogName) url = url + "search?nomeCane=" + dogName;
@@ -217,6 +220,95 @@ function createDog() {
             console.error('Error:', error);
             document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
         });
+}
+
+function deleteDog() {
+    const dogId = document.getElementById('deleteDogId').value;
+    if (dogId === "") {
+        document.getElementById('deleteWrongResponse').innerText = 'No dog id passed';
+        return;
+    }
+
+    const url = `/api/cane/${dogId}`;
+
+    const token = sessionStorage.getItem('authToken');
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }})
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('deleteWrongResponse').innerText = "";
+                response.json().then(data => {
+                    document.getElementById('deleteRightResponse').innerText = "Num deleted dogs: " +  data
+                }).catch(error => {
+                    console.error("Errore durante la lettura della risposta JSON:", error.message);
+                });
+            } else if (response.status === 400) {
+                // Gestione specifica del Bad Request
+                return response.text().then(data => {
+                    console.error("Bad Request:", data);
+                    document.getElementById('deleteWrongResponse').innerText = `Bad Request: check passed data`;
+                });
+            } else {
+                response.text().then(data => {
+                    console.error("Errore restituito dal server:", data);
+                    document.getElementById('deleteWrongResponse').innerText = data;
+                }).catch(error => {
+                    console.error("Errore durante la lettura della risposta di errore:", error.message);
+                });
+                document.getElementById('deleteRightResponse').innerText = "";
+            }
+        })
+        .catch(error => {
+            console.error("Errore nella chiamata fetch:", error.message);
+        });
+}
+
+function doLoginToken() {
+    const url = '/api/loginWithToken';
+
+    // Ottieni i dati dal modulo
+    const username = document.getElementById("usrToken").value;
+    const password = document.getElementById("pwdToken").value;
+
+    if (username === "" || password === "") {
+        document.getElementById('loginWithTokenWrongResponse').innerText = 'Empty username or password';
+        return;
+    }
+
+    const data = {
+        username: username,
+        password: password
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'  // Set the request content type to JSON
+        },
+        body: JSON.stringify(data)  // Convert data to JSON string
+    })
+    .then(response => {
+        return response.json().then(data => {
+            if (response.ok) {
+                console.log(data.token);  // Log the token or use it
+
+                sessionStorage.setItem('authToken', data.token);
+
+                document.getElementById('loginWithTokenWrongResponse').innerText = "";
+                document.getElementById('loginWithTokenRightResponse').innerText = data.token;
+
+                // return data.token;  // Return the response data (token or whatever is returned)
+            } else {
+                document.getElementById('loginWithTokenWrongResponse').innerText = 'Error ' + response.status + ': ' + data.error;
+                document.getElementById('loginWithTokenRightResponse').innerText = "";
+            }
+        });
+    });
 }
 
 // Call this function to fetch owners when the page loads

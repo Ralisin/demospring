@@ -1,12 +1,14 @@
-package it.uniroma2.sc.demospringhibernate.control;
+package it.uniroma2.sc.demospringhibernate.service;
 
 import it.uniroma2.sc.demospringhibernate.enums.Role;
 import it.uniroma2.sc.demospringhibernate.secutiry.TokenStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
-public class PermissionController {
+public class PermissionService {
     @Autowired
     private TokenStorage tokenStorage;
 
@@ -17,7 +19,7 @@ public class PermissionController {
             // Check token
             role = tokenStorage.getRoleByToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().info(e.getMessage());
             return false;
         }
 

@@ -11,8 +11,12 @@ public class TokenStorage {
     // Map UserId to his Role
     private ConcurrentHashMap<String, Role> tokenMap = new ConcurrentHashMap<>();
 
-    public String generateToken() {
-        return UUID.randomUUID().toString().replace("-", "");
+    public String generateToken(Role role) {
+        String token = UUID.randomUUID().toString().replace("-", "");
+
+        storeToken(token, role);
+
+        return token;
     }
 
     public void storeToken(String token, Role role) {
