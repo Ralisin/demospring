@@ -12,11 +12,11 @@ public class DeleteController implements IDeleteController {
     private DogDao dogDao;
 
     @Autowired
-    private TokenStorage tokenStorage;
+    private PermissionController permissionController;
 
     @Override
     public int deleteDogById(Long id, String token) throws Exception {
-        if (tokenStorage.getRoleByToken(token) != Role.VETERINARIO) throw new Exception("Do not have permissions to delete dogs");
+        if (permissionController.hasPermissionToDelete(token)) throw new Exception("Do not have permissions to delete dogs");
 
         if(!dogDao.existsById(id)) throw new Exception("No dog found for id " + id);
 
