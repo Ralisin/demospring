@@ -222,6 +222,7 @@ function createDog() {
         });
 }
 
+// Function to delete an existing dog via id
 function deleteDog() {
     const dogId = document.getElementById('deleteDogId').value;
     if (dogId === "") {
@@ -268,6 +269,7 @@ function deleteDog() {
         });
 }
 
+// Function to login and store returned token in current browser session
 function doLoginToken() {
     const url = '/api/loginWithToken';
 
