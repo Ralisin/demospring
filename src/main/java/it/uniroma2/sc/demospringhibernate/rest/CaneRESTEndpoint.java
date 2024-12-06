@@ -3,6 +3,7 @@ package it.uniroma2.sc.demospringhibernate.rest;
 import it.uniroma2.sc.demospringhibernate.control.ICreationAndRetrievalController;
 import it.uniroma2.sc.demospringhibernate.control.IDeleteController;
 import it.uniroma2.sc.demospringhibernate.dto.CaneDTO;
+import it.uniroma2.sc.demospringhibernate.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class CaneRESTEndpoint {
 
     @Autowired
     private IDeleteController deleteController;
+
+    @Autowired
+    private PermissionService permissionService;
 
     /**
      * Creates a new dog.
@@ -108,6 +112,8 @@ public class CaneRESTEndpoint {
         if (dogId == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         token = token.replace("Bearer ", "");
+
+        if (!permissionService.hasPermissionToDelete(token)) return new ResponseEntity<>("Do not have permissions to delete dogs", HttpStatus.UNAUTHORIZED);
 
         try {
             return new ResponseEntity<>(deleteController.deleteDogById(dogId, token), HttpStatus.OK);
