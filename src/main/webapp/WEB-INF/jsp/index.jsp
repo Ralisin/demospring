@@ -100,7 +100,7 @@
             <button type="button" onclick="createDog()">Create Dog</button>
         </form>
 
-        <p id="createDogResponse"></p> <!-- Placeholder to display the result of the dog creation request -->
+        <p id="createDogResponse" style="color: red"></p> <!-- Placeholder to display the result of the dog creation request -->
     </div>
     <div class="divider"></div>
     <div class="subcol">

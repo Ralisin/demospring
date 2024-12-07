@@ -33,7 +33,12 @@ public class CaneRESTEndpoint {
      *         or HttpStatus.BAD_REQUEST if the dog entity is null.
      */
     @RequestMapping(method = RequestMethod.POST, path = "")
-    public ResponseEntity<?> creaCane(@RequestBody(required = true) CaneDTO c) {
+    public ResponseEntity<?> creaCane(@RequestBody(required = true) CaneDTO c, @RequestHeader("Authorization") String token) {
+        token = token.replace("Bearer ", "");
+
+        if (!permissionService.hasPermissionToCreate(token))
+            return new ResponseEntity<>("Do not have permissions to create a dogs", HttpStatus.UNAUTHORIZED);
+
         if (c != null) {
             CaneDTO newCane = controllerDiCreazioneERetrieval.createDog(c);
             ResponseEntity<CaneDTO> response = new ResponseEntity<>(newCane, HttpStatus.CREATED);
@@ -56,6 +61,7 @@ public class CaneRESTEndpoint {
     public ResponseEntity<?> leggiCane(@PathVariable Long dogId) {
         if (dogId != null) {
             CaneDTO c = controllerDiCreazioneERetrieval.loadDogById(dogId);
+
             if (c == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

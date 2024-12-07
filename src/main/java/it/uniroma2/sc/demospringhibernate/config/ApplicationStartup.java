@@ -26,7 +26,6 @@ public class ApplicationStartup
     public void onApplicationEvent(final ApplicationReadyEvent event) {
         creationAndRetrievalController.createSampleData();
 
-//        String token = tokenStorage.generateToken();
         String token = "VetToken";
         tokenStorage.storeToken(token, Role.VETERINARIO);
 

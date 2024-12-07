@@ -13,57 +13,71 @@ function doGet() {
             return response.text();
         })
         .then(data => {
-            const jsonData = JSON.parse(data);
-
-            const container = document.createElement('div');
-
-            const rowTop = document.createElement('div');
-            const rowMiddle = document.createElement('div');
-            const rowBottom = document.createElement('div');
-
-            rowMiddle.style.marginLeft = '25px';
-            rowMiddle.style.display = 'flex';
-            rowMiddle.style.alignItems = 'flex-start';
-
-            container.appendChild(rowTop);
-            container.appendChild(rowMiddle);
-            container.appendChild(rowBottom);
-
-            const preElementLeft = document.createElement('pre');
-            preElementLeft.style.display = 'inline-block';
-            preElementLeft.style.marginRight = '10px';
-            preElementLeft.textContent = "[";
-
-            rowTop.appendChild(preElementLeft);
-
-            // Add single elements to the list
-            jsonData.forEach((item, index) => {
-                const formattedItem = JSON.stringify(item, null, 2);
-
-                const preElement = document.createElement('pre');
-                preElement.style.display = 'inline-block';
-                preElement.style.marginRight = '10px';
-                preElement.textContent = formattedItem + ((index < jsonData.length - 1) ? "," : "");
-
-                rowMiddle.appendChild(preElement);
-            });
-
-            // Crea la riga inferiore con la parentesi quadra di chiusura
-            const preElementRight = document.createElement('pre');
-            preElementRight.style.display = 'inline-block';
-            preElementRight.style.marginRight = '10px';
-            preElementRight.textContent = "]";
-
-            rowBottom.appendChild(preElementRight);
-
-            document.getElementById('responseToGet').innerHTML = '';
-            document.getElementById('responseToGet').appendChild(container);
+            styleGet(data, 'responseToGet')
         })
         .catch(error => {
             // Handle possible errors
             console.error('Error:', error);
             document.getElementById('responseToGet').innerText = 'Error: ' + error.message;
         });
+}
+
+// Function to style a GET with JSON data (list or single item)
+function styleGet(data, pId) {
+    const jsonData = JSON.parse(data);
+
+    const container = document.createElement('div');
+
+    const rowTop = document.createElement('div');
+    const rowMiddle = document.createElement('div');
+    const rowBottom = document.createElement('div');
+
+    rowMiddle.style.marginLeft = '25px';
+    rowMiddle.style.display = 'flex';
+    rowMiddle.style.alignItems = 'flex-start';
+
+    container.appendChild(rowTop);
+    container.appendChild(rowMiddle);
+    container.appendChild(rowBottom);
+
+    const preElementLeft = document.createElement('pre');
+    preElementLeft.style.display = 'inline-block';
+    preElementLeft.style.marginRight = '10px';
+    preElementLeft.textContent = "[";
+
+    rowTop.appendChild(preElementLeft);
+
+    if (Array.isArray(jsonData)) {
+        // Add single elements to the list
+        jsonData.forEach((item, index) => {
+            const formattedItem = JSON.stringify(item, null, 2);
+
+            const preElement = document.createElement('pre');
+            preElement.style.display = 'inline-block';
+            preElement.style.marginRight = '10px';
+            preElement.textContent = formattedItem + ((index < jsonData.length - 1) ? "," : "");
+
+            rowMiddle.appendChild(preElement);
+        });
+    } else {
+        const preElement = document.createElement('pre');
+        preElement.style.display = 'inline-block';
+        preElement.style.marginRight = '10px';
+        preElement.textContent = JSON.stringify(jsonData, null, 2);
+
+        rowMiddle.appendChild(preElement);
+    }
+
+    // Crea la riga inferiore con la parentesi quadra di chiusura
+    const preElementRight = document.createElement('pre');
+    preElementRight.style.display = 'inline-block';
+    preElementRight.style.marginRight = '10px';
+    preElementRight.textContent = "]";
+
+    rowBottom.appendChild(preElementRight);
+
+    document.getElementById(pId).innerHTML = '';
+    document.getElementById(pId).appendChild(container);
 }
 
 // Function to clear output
@@ -192,6 +206,8 @@ function createDog() {
     const dogName = document.getElementById('newDogName').value;
     const ownerId = document.getElementById('dogOwner').value;
 
+    const token = sessionStorage.getItem('authToken');
+
     // Prepare the data to send in the POST request
     const data = {
         nomeCane: dogName, padrone: {id: ownerId}  // Only the owner ID is required
@@ -199,27 +215,74 @@ function createDog() {
 
     // Make the POST request to create the dog
     fetch('/api/cane/', {
-        method: 'POST', headers: {
-            'Content-Type': 'application/json'  // Set the request content type to JSON
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',  // Set the request content type to JSON
+            'Authorization': `Bearer ${token}`  // Set authorization token in the request
         }, body: JSON.stringify(data)  // Convert data to JSON string
     })
         .then(response => {
-            // Check if the dog was created successfully
-            if (response.status === 201) {
-                return response.json();  // Return the newly created dog data
-            } else {
-                throw new Error('Error in creating dog: ' + response.status);
-            }
-        })
-        .then(data => {
-            // Display a success message with the created dog's details
-            document.getElementById('createDogResponse').innerText = 'Dog created successfully: ' + JSON.stringify(data);
+            return response.text().then(data => {
+                if (response.ok) {
+                    document.getElementById('createDogResponse').style.color = "black";
+                    styleGet(data, 'createDogResponse');
+                } else {
+                    console.error('Error:', data);
+
+                    document.getElementById('createDogResponse').style.color = "red";
+                    document.getElementById('createDogResponse').innerText = data;
+                }
+            })
         })
         .catch(error => {
-            // Handle errors during dog creation
             console.error('Error:', error);
+
+            document.getElementById('createDogResponse').style.color = "red";
             document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
-        });
+        })
+        // .then(response => {
+        //     // Check if the dog was created successfully
+        //     if (response.status === 201) {
+        //         return response.json();  // Return the newly created dog data
+        //     } else {
+        //         throw new Error('Error in creating dog: ' + response.status);
+        //     }
+        // })
+        // .then(data => {
+        //     // Display a success message with the created dog's details
+        //     styleGet(JSON.stringify(data), 'createDogResponse')
+        // })
+        // .catch(error => {
+        //     // Handle errors during dog creation
+        //     console.error('Error:', error);
+        //     document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
+        // });
+
+    // // Make the POST request to create the dog
+    // fetch('/api/cane/', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',  // Set the request content type to JSON
+    //         'Authorization': `Bearer ${token}`  // Set authorization token in the request
+    //     }, body: JSON.stringify(data)  // Convert data to JSON string
+    // })
+    //     .then(response => {
+    //         // Check if the dog was created successfully
+    //         if (response.status === 201) {
+    //             return response.json();  // Return the newly created dog data
+    //         } else {
+    //             throw new Error('Error in creating dog: ' + response.status);
+    //         }
+    //     })
+    //     .then(data => {
+    //         // Display a success message with the created dog's details
+    //         styleGet(JSON.stringify(data), 'createDogResponse')
+    //     })
+    //     .catch(error => {
+    //         // Handle errors during dog creation
+    //         console.error('Error:', error);
+    //         document.getElementById('createDogResponse').innerText = 'Error: ' + error.message;
+    //     });
 }
 
 // Function to delete an existing dog via id
@@ -238,7 +301,7 @@ function deleteDog() {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}` // Set authorization token in the request
         }})
         .then(response => {
             if (response.ok) {
@@ -248,7 +311,7 @@ function deleteDog() {
                 }).catch(error => {
                     console.error("Errore durante la lettura della risposta JSON:", error.message);
                 });
-            } else if (response.status === 400) {
+            } else if (response.status === 400) { // Code 400 == Bad Request
                 // Gestione specifica del Bad Request
                 return response.text().then(data => {
                     console.error("Bad Request:", data);
